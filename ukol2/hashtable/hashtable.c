@@ -46,7 +46,16 @@ void ht_init(ht_table_t *table)
  * V prípade úspechu vráti ukazovateľ na nájdený prvok; v opačnom prípade vráti
  * hodnotu NULL.
  */
-ht_item_t *ht_search(ht_table_t *table, char *key) {
+ht_item_t *ht_search(ht_table_t *table, char *key) 
+{
+  ht_item_t *item; //pomocny prvek pro prochazeni a porvnavni
+
+  for(item = (*table)[get_hash(key)]; item ; item = item->next )//iterace prvku z hash-tabulky[klic] 
+  {                                                             //a nasledna inkremntace na dalsi prvek v tabulce
+    if(!strcmp(key,item->key))
+      return item;//v pripade uspechu vraci ukazatel na spravny prvke jinak NULL
+  }
+
   return NULL;
 }
 
@@ -58,7 +67,20 @@ ht_item_t *ht_search(ht_table_t *table, char *key) {
  * Pri implementácii využite funkciu ht_search. Pri vkladaní prvku do zoznamu
  * synonym zvoľte najefektívnejšiu možnosť a vložte prvok na začiatok zoznamu.
  */
-void ht_insert(ht_table_t *table, char *key, float value) {
+void ht_insert(ht_table_t *table, char *key, float value) 
+{
+  ht_item_t *item = ht_search(table,key);
+
+  if(item)
+    item->value = value;
+
+  ht_item_t *new = malloc(sizeof(ht_item_t));
+  if(new != NULL)
+  {
+    new->key = key;
+    new->value = value;
+    new->next = NULL;
+  }
 }
 
 /*
