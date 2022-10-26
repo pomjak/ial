@@ -69,20 +69,22 @@ ht_item_t *ht_search(ht_table_t *table, char *key)
  */
 void ht_insert(ht_table_t *table, char *key, float value) 
 {
-  ht_item_t *item = ht_search(table,key);
+  ht_item_t *item = ht_search(table,key);//hledani zda nov
 
   if(item)
-    item->value = value;
+    item->value = value;//aktualizace dat
+  else{
+    ht_item_t *new = malloc(sizeof(ht_item_t));
+    if(new != NULL)
+    {
+      new->key = key;
+      new->value = value;
 
-  ht_item_t *new = malloc(sizeof(ht_item_t));
-  if(new != NULL)
-  {
-    new->key = key;
-    new->value = value;
-    int hash = get_hash(key);
-    new->next = (*table)[hash];
-    (*table)[hash] = new;
+      new->next = (*table)[get_hash(key)];
+      (*table)[get_hash(key)] = new;
+    }
   }
+  
 }
 
 /*
@@ -95,7 +97,11 @@ void ht_insert(ht_table_t *table, char *key, float value)
  */
 float *ht_get(ht_table_t *table, char *key) 
 {
-  
+  ht_item_t *item = ht_search(table,key);
+
+  if(item)
+    return &item->value;
+
   return NULL;
 }
 
@@ -107,7 +113,25 @@ float *ht_get(ht_table_t *table, char *key)
  *
  * Pri implementácii NEVYUŽÍVAJTE funkciu ht_search.
  */
-void ht_delete(ht_table_t *table, char *key) {
+void ht_delete(ht_table_t *table, char *key) 
+{
+  ht_item_t *wanted = NULL;
+  ht_item_t *pre_wanted = NULL;
+
+  for(wanted = (*table)[get_hash(key)]; wanted; pre_wanted = wanted, wanted = wanted->next)
+  {
+    if(!strcmp(wanted->key,key))
+    {
+      if(pre_wanted == NULL)//prvek se nachazi na zacatku hash tabulky
+        (*table)[get_hash(key)] = wanted->next;//uprava zacatku tabulky
+
+      else
+        pre_wanted->next = wanted->next;//jinak uprava navaznosti 
+
+      free(wanted);
+    }
+  }
+
 }
 
 /*
@@ -116,5 +140,22 @@ void ht_delete(ht_table_t *table, char *key) {
  * Funkcia korektne uvoľní všetky alokované zdroje a uvedie tabuľku do stavu po
  * inicializácii.
  */
-void ht_delete_all(ht_table_t *table) {
+void ht_delete_all(ht_table_t *table) 
+{
+  ht_item_t *item = NULL; 
+  ht_item_t *tmp = NULL;
+
+  for(int i = 0; i < HT_SIZE; ++i)
+  {
+    item = (*table)[i];
+
+    while(item != NULL)//dokud nedojde na konec seznamu
+    {
+      tmp = item;
+      item = item->next;
+      free(tmp);//smazani predchoziho prvku
+      tmp = NULL;
+    }
+    (*table)[i] = NULL;//zahozeni ukazatele z hash table
+  }
 }
