@@ -34,7 +34,21 @@ void bst_init(bst_node_t **tree)
 bool bst_search(bst_node_t *tree, char key, int *value) 
 {
   
-  return false;
+  if(!tree)
+    return false;
+
+  if(tree->key == key)
+  {
+    *value = tree->value;
+    return true;
+  }
+
+  else if(key > tree->key)
+    return bst_search(tree->right, key, value);
+
+  else
+    return bst_search(tree->left, key, value);
+
 }
 
 /*
