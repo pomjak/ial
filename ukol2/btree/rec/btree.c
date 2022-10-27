@@ -77,10 +77,13 @@ void bst_insert(bst_node_t **tree, char key, int value)
     }
     else return;//malloc failed
   }
+
   else if (key > (*tree)->key)
     bst_insert(&(*tree)->right,key,value);
+
   else if (key < (*tree)->key)
     bst_insert(&(*tree)->left,key,value);
+    
   else
     (*tree)->value = value;
   
@@ -99,7 +102,9 @@ void bst_insert(bst_node_t **tree, char key, int value)
  *
  * Funkciu implementujte rekurzívne bez použitia vlastných pomocných funkcií.
  */
-void bst_replace_by_rightmost(bst_node_t *target, bst_node_t **tree) {
+void bst_replace_by_rightmost(bst_node_t *target, bst_node_t **tree) 
+{
+
 }
 
 /*
