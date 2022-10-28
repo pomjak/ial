@@ -112,7 +112,7 @@ void bst_replace_by_rightmost(bst_node_t *target, bst_node_t **tree)
     bst_node_t *temp = (*tree);
 
     (*tree) = (*tree)->left;
-    
+
     target->value = temp->value;
     target->key = temp->key;
 
@@ -199,6 +199,12 @@ void bst_dispose(bst_node_t **tree)
  */
 void bst_preorder(bst_node_t *tree) 
 {
+  if(tree != NULL)
+  {
+    bst_print_node(tree);
+    bst_preorder(tree->left);
+    bst_preorder(tree->right);
+  }
 }
 
 /*
@@ -210,6 +216,12 @@ void bst_preorder(bst_node_t *tree)
  */
 void bst_inorder(bst_node_t *tree) 
 {
+  if(tree != NULL)
+  {
+    bst_inorder(tree->left);
+    bst_print_node(tree);
+    bst_inorder(tree->right);
+  }
 }
 /*
  * Postorder prechod stromom.
@@ -220,4 +232,10 @@ void bst_inorder(bst_node_t *tree)
  */
 void bst_postorder(bst_node_t *tree) 
 {
+  if(tree != NULL)
+  {
+    bst_postorder(tree->left);
+    bst_postorder(tree->right);
+    bst_print_node(tree);
+  }
 }
