@@ -72,8 +72,8 @@ void bst_insert(bst_node_t **tree, char key, int value)
       new->key = key;
       new->value = value;
       new->right = NULL;
-      new->left =NULL;
-      (*tree)  = new;
+      new->left = NULL;
+      (*tree) = new;
     }
     else return;//malloc failed
   }
@@ -104,18 +104,20 @@ void bst_insert(bst_node_t **tree, char key, int value)
  */
 void bst_replace_by_rightmost(bst_node_t *target, bst_node_t **tree) 
 {
-  if(target == NULL)
+  if(target == NULL || (*tree) == NULL)
     return;
   
   if((*tree)->right == NULL)
   {
     bst_node_t *temp = (*tree);
 
+    (*tree) = (*tree)->left;
+    
     target->value = temp->value;
     target->key = temp->key;
 
     if(temp->left != NULL)
-      (*tree) = temp->left;
+      target->left = temp->left;
 
     free(temp);
   }
@@ -143,14 +145,29 @@ void bst_delete(bst_node_t **tree, char key)
 
   if((*tree)->key == key)
   {
+    if((*tree)->right == NULL)
+    {
+      bst_node_t *temp = (*tree);
+      (*tree) = (*tree)->left;
+      free(temp);
+    }
     
+    else if((*tree)->left == NULL)
+    {
+      bst_node_t *temp = (*tree);
+      (*tree) = (*tree)->right;
+      free(temp);
+    }
+    else bst_replace_by_rightmost((*tree),&(*tree)->left);
   }
 
   else if(key > (*tree)->key)
     bst_delete(&(*tree)->right, key);
 
-  else 
+  else if(key < (*tree)->key)
     bst_delete(&(*tree)->left, key);
+  
+  else return;
 }
 
 /*
@@ -164,6 +181,13 @@ void bst_delete(bst_node_t **tree, char key)
  */
 void bst_dispose(bst_node_t **tree) 
 {
+  if((*tree)!=NULL)
+  {
+    if((*tree)->right != NULL)bst_dispose(&(*tree)->right);
+    if((*tree)->left != NULL)bst_dispose(&(*tree)->left);
+    free((*tree));
+    (*tree) = NULL;
+  }
 }
 
 /*
