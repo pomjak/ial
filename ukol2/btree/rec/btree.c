@@ -107,17 +107,34 @@ void bst_replace_by_rightmost(bst_node_t *target, bst_node_t **tree)
   if(target == NULL || (*tree) == NULL)
     return;
   
+  bst_node_t *temp;
+  
   if((*tree)->right == NULL)
   {
-    bst_node_t *temp = (*tree);
-
-    (*tree) = (*tree)->left;
+    temp = (*tree);
 
     target->value = temp->value;
     target->key = temp->key;
 
+    target->left = NULL;
+
     if(temp->left != NULL)
       target->left = temp->left;
+
+    free(temp);
+  }
+
+  else if((*tree)->right->right == NULL)
+  {
+    temp = (*tree)->right;
+
+    target->value = temp->value;
+    target->key = temp->key;
+
+    (*tree)->right = NULL;
+
+    if(temp->left != NULL)
+      (*tree)->right = temp->left;
 
     free(temp);
   }
