@@ -134,12 +134,10 @@ void bst_replace_by_rightmost(bst_node_t *target, bst_node_t **tree)
   if(target == NULL || (*tree) == NULL)
     return;
 
-  for(bst_node_t *temp = (*tree); temp->right; temp = temp->right)
+  for(bst_node_t *temp = (*tree),*pre = NULL; temp; temp = temp->right)
   {
-    if((*tree)->right == NULL)
+    if(temp->right == NULL)
     {
-      temp = (*tree);
-
       target->value = temp->value;
       target->key = temp->key;
 
@@ -152,17 +150,18 @@ void bst_replace_by_rightmost(bst_node_t *target, bst_node_t **tree)
       break;
     }
 
-    else if((*tree)->right->right == NULL)
+    else if(temp->right->right == NULL)
     {
-      temp = (*tree)->right;
+      pre = temp;
+      temp = temp->right;
 
       target->value = temp->value;
       target->key = temp->key;
 
-      (*tree)->right = NULL;
+      pre->right = NULL;
 
       if(temp->left != NULL)
-        (*tree)->right = temp->left;
+        pre->right = temp->left;
 
       free(temp);
       break;
@@ -184,7 +183,43 @@ void bst_replace_by_rightmost(bst_node_t *target, bst_node_t **tree)
  */
 void bst_delete(bst_node_t **tree, char key) 
 {
-  
+  if((*tree) == NULL)
+    return;
+
+  bst_node_t *temp = (*tree), *pre = NULL;
+
+  while (temp != NULL && temp->key != key) 
+  {
+    pre = temp;
+
+    if(key < temp->key)
+      temp = temp->left;
+
+    if(key > temp->key)
+      temp = temp->right;
+  }
+
+  if(!temp)
+    return;
+
+  if(temp->left == NULL || temp->right == NULL) 
+  {
+    bst_node_t *sub = NULL;
+
+    if(temp->left == NULL)
+      sub = temp->right;
+    else
+      sub = temp->left;
+
+    if(temp == pre->left)
+      pre->left = sub;
+
+    else
+      pre->right = sub;
+
+    free(temp);
+  }
+  else bst_replace_by_rightmost(temp,&temp->left);
 }
 
 /*
@@ -197,7 +232,9 @@ void bst_delete(bst_node_t **tree, char key)
  * Funkciu implementujte iteratívne pomocou zásobníku uzlov a bez použitia
  * vlastných pomocných funkcií.
  */
-void bst_dispose(bst_node_t **tree) {
+void bst_dispose(bst_node_t **tree) 
+{
+  
 }
 
 /*
