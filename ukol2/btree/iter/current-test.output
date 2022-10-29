@@ -1,0 +1,21 @@
+Binary Search Tree - testing script
+-----------------------------------
+
+[test_tree_init] Initialize the tree
+
+[test_tree_dispose_empty] Dispose the tree
+
+[test_tree_search_empty] Search in an empty tree (A)
+
+[test_tree_insert_root] Insert an item (H,1)
+Binary tree structure:
+
+  +-[H,1]
+
+
+[test_tree_search_root] Search in a single node tree (H)
+Binary tree structure:
+
+  +-[H,1]
+
+
