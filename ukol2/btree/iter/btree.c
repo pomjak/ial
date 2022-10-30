@@ -36,19 +36,19 @@ bool bst_search(bst_node_t *tree, char key, int *value)
 {
   bst_node_t *temp = tree;
 
-  while(temp)
+  while(temp)//iterace dokud neni NULL
   {
     if(key == temp->key)
     {
-      *value = temp->value; 
+      *value = temp->value; //predani dat
       return true;
     }
-    else if(key > temp->key)
+    else if(key > temp->key)//posunuti podle hodnoty klice
       temp = temp->right;
     else if(key < temp->key)
       temp = temp->left;
     else
-      return false;
+      return false;//nenalezeno
   }
 
   return false;
@@ -69,7 +69,7 @@ void bst_insert(bst_node_t **tree, char key, int value)
 {
   bst_node_t *temp = (*tree), *parent = NULL;
 
-  while(temp != NULL)
+  while(temp != NULL)//vyhledavani iteraci a ukladani otce a daneho uzlu
   {
 
     if(key > temp->key)
@@ -93,7 +93,7 @@ void bst_insert(bst_node_t **tree, char key, int value)
     }
   }
 
-  bst_node_t *new = malloc(sizeof(bst_node_t)); 
+  bst_node_t *new = malloc(sizeof(bst_node_t)); //vytvoreni noveho uzlu
   if(new != NULL)
   {
     new->key = key;
@@ -101,12 +101,12 @@ void bst_insert(bst_node_t **tree, char key, int value)
     new->right = NULL;
     new->left = NULL;
 
-    if(!parent)
+    if(!parent)//vlozeni korenoveho uzlu
       (*tree) = new;
     else
-      temp  = new;
+      temp = new;
 
-    if(parent && key > parent->key)
+    if(parent && key > parent->key)//vytoreni navaznosti
       parent->right = new;
 
     else if(parent && key < parent->key)
@@ -136,32 +136,32 @@ void bst_replace_by_rightmost(bst_node_t *target, bst_node_t **tree)
 
   for(bst_node_t *temp = (*tree),*pre = NULL; temp; temp = temp->right)
   {
-    if(temp->right == NULL)
+    if(temp->right == NULL)//nalezeni nejpravejsiho uzlu
     {
       target->value = temp->value;
       target->key = temp->key;
 
-      target->left = NULL;
+      target->left = NULL;//zruseni navaznosti
 
       if(temp->left != NULL)
-        target->left = temp->left;
+        target->left = temp->left;//preklenuti navaznosti na levy podstrom presunuteho uzlu
 
       free(temp);
       break;
     }
 
-    else if(temp->right->right == NULL)
+    else if(temp->right->right == NULL)//nalezeni uzlu
     {
-      pre = temp;
+      pre = temp;//ulozeni otce
       temp = temp->right;
 
-      target->value = temp->value;
+      target->value = temp->value;//predani dat
       target->key = temp->key;
 
-      pre->right = NULL;
+      pre->right = NULL;//zruseni navaznosti otce
 
       if(temp->left != NULL)
-        pre->right = temp->left;
+        pre->right = temp->left;//navaznost otce na levy podstrom syna
 
       free(temp);
       break;
@@ -290,12 +290,12 @@ void bst_preorder(bst_node_t *tree)
   stack_bst_t stack;
   stack_bst_init(&stack);
 
-  bst_leftmost_preorder(tree,&stack);
+  bst_leftmost_preorder(tree,&stack);//ulozeni nejlevejsiho uzlu na stack
   
-  while(!stack_bst_empty(&stack))
+  while(!stack_bst_empty(&stack))//dokud neni stack prazdny
   {
     tree = stack_bst_pop(&stack);
-    bst_leftmost_preorder(tree->right, &stack);
+    bst_leftmost_preorder(tree->right, &stack);//hledani nejlevejsiho uzlu u praveho syna
   }
 
 }
@@ -331,13 +331,13 @@ void bst_inorder(bst_node_t *tree)
   stack_bst_t stack;
   stack_bst_init(&stack);
 
-  bst_leftmost_inorder(tree,&stack);
+  bst_leftmost_inorder(tree,&stack);//nalezeni leftmost v celem stromu
 
   while(!stack_bst_empty(&stack))
   {
-    tree = stack_bst_pop(&stack);
-    bst_print_node(tree);
-    bst_leftmost_inorder(tree->right,&stack);
+    tree = stack_bst_pop(&stack);//vraceni uzlu 
+    bst_print_node(tree);//vypsani se zacatkem vlevo
+    bst_leftmost_inorder(tree->right,&stack);//po leve vetvi v pravem podstromu
   }
 }
 
@@ -381,12 +381,12 @@ void bst_postorder(bst_node_t *tree)
 
   while(!stack_bst_empty(&stack_bst))
   {
-    tree = stack_bst_pop(&stack_bst);
+    tree = stack_bst_pop(&stack_bst);//vraceni uzlu pro praci s nim
 
-    if(stack_bool_pop(&stack_bool))
+    if(stack_bool_pop(&stack_bool))//pokud byl jednou zpracovan
     {
       stack_bst_push(&stack_bst,tree);
-      stack_bool_push(&stack_bool,false);
+      stack_bool_push(&stack_bool,false);//zpracovani podruhe
       bst_leftmost_postorder(tree->right, &stack_bst, &stack_bool);
 
       continue;

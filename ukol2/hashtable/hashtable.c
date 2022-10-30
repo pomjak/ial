@@ -80,8 +80,8 @@ void ht_insert(ht_table_t *table, char *key, float value)
       new->key = key;
       new->value = value;
 
-      new->next = (*table)[get_hash(key)];
-      (*table)[get_hash(key)] = new;
+      new->next = (*table)[get_hash(key)];//uprava navaznosti
+      (*table)[get_hash(key)] = new;//ulozeni na zacatek
     }
   }
   

@@ -39,11 +39,11 @@ bool bst_search(bst_node_t *tree, char key, int *value)
 
   if(tree->key == key)
   {
-    *value = tree->value;
+    *value = tree->value;//predani hodnoty
     return true;
   }
 
-  else if(key > tree->key)
+  else if(key > tree->key)//rekurze podle hodnoty klice
     return bst_search(tree->right, key, value);
 
   else
@@ -66,7 +66,7 @@ void bst_insert(bst_node_t **tree, char key, int value)
 {
   if((*tree) == NULL)
   {
-    bst_node_t *new = malloc(sizeof(bst_node_t)); 
+    bst_node_t *new = malloc(sizeof(bst_node_t)); //vytvoreni noveho uzlu
     if(new != NULL)
     {
       new->key = key;
@@ -78,14 +78,14 @@ void bst_insert(bst_node_t **tree, char key, int value)
     else return;//malloc failed
   }
 
-  else if (key > (*tree)->key)
+  else if (key > (*tree)->key)//rekurze podle hodnoty klice
     bst_insert(&(*tree)->right,key,value);
 
   else if (key < (*tree)->key)
     bst_insert(&(*tree)->left,key,value);
     
   else
-    (*tree)->value = value;
+    (*tree)->value = value;//aktualizace dat
   
 }
 
@@ -109,37 +109,37 @@ void bst_replace_by_rightmost(bst_node_t *target, bst_node_t **tree)
   
   bst_node_t *temp;
   
-  if((*tree)->right == NULL)
+  if((*tree)->right == NULL)//uzel nalezen jako list
   {
     temp = (*tree);
 
-    target->value = temp->value;
+    target->value = temp->value;//predani dat
     target->key = temp->key;
 
-    target->left = NULL;
+    target->left = NULL;//zruseni navaznosti
 
-    if(temp->left != NULL)
+    if(temp->left != NULL)//preklenuti navaznosti
       target->left = temp->left;
 
     free(temp);
   }
 
-  else if((*tree)->right->right == NULL)
+  else if((*tree)->right->right == NULL)//nalezeni nejpravejsiho uzlu v roli otce leveho podstromu
   {
     temp = (*tree)->right;
 
-    target->value = temp->value;
+    target->value = temp->value;//predani dat
     target->key = temp->key;
 
-    (*tree)->right = NULL;
+    (*tree)->right = NULL;//zruseni navaznosti
 
-    if(temp->left != NULL)
+    if(temp->left != NULL)//preklenuti navaznosti na levy podstrom
       (*tree)->right = temp->left;
 
     free(temp);
   }
 
-  else bst_replace_by_rightmost(target, &(*tree)->right);
+  else bst_replace_by_rightmost(target, &(*tree)->right);//jinak rekurze pro vzhledani 
 
 }
 
@@ -160,25 +160,25 @@ void bst_delete(bst_node_t **tree, char key)
   if((*tree) == NULL)
     return;//chyba
 
-  if((*tree)->key == key)
+  if((*tree)->key == key)//pri nalezeni spravneho uzlu
   {
-    if((*tree)->right == NULL)
+    if((*tree)->right == NULL)//uzel ma maximalne jeden podstrom a to levy
     {
       bst_node_t *temp = (*tree);
-      (*tree) = (*tree)->left;
+      (*tree) = (*tree)->left;//posunti na levy podstrom
       free(temp);
     }
     
-    else if((*tree)->left == NULL)
+    else if((*tree)->left == NULL)//uzel ma maximalne 1 podstrom a to pravy
     {
       bst_node_t *temp = (*tree);
-      (*tree) = (*tree)->right;
+      (*tree) = (*tree)->right;//posunuti na pravy podstrom
       free(temp);
     }
-    else bst_replace_by_rightmost((*tree),&(*tree)->left);
+    else bst_replace_by_rightmost((*tree),&(*tree)->left);//uzel ma 2 podstromy
   }
 
-  else if(key > (*tree)->key)
+  else if(key > (*tree)->key)//vzhledavani uzlu rekurzi
     bst_delete(&(*tree)->right, key);
 
   else if(key < (*tree)->key)
@@ -200,8 +200,8 @@ void bst_dispose(bst_node_t **tree)
 {
   if((*tree)!=NULL)
   {
-    if((*tree)->right != NULL)bst_dispose(&(*tree)->right);
-    if((*tree)->left != NULL)bst_dispose(&(*tree)->left);
+    if((*tree)->right != NULL)bst_dispose(&(*tree)->right);//vnoreni pro eliminaci praveho podstromu
+    if((*tree)->left != NULL)bst_dispose(&(*tree)->left);//to same plati pro levy podstrom
     free((*tree));
     (*tree) = NULL;
   }
@@ -218,9 +218,9 @@ void bst_preorder(bst_node_t *tree)
 {
   if(tree != NULL)
   {
-    bst_print_node(tree);
-    bst_preorder(tree->left);
-    bst_preorder(tree->right);
+    bst_print_node(tree);//1.vypsat koren
+    bst_preorder(tree->left);//pote levou stranu
+    bst_preorder(tree->right);//a pak pravou
   }
 }
 
@@ -235,9 +235,9 @@ void bst_inorder(bst_node_t *tree)
 {
   if(tree != NULL)
   {
-    bst_inorder(tree->left);
-    bst_print_node(tree);
-    bst_inorder(tree->right);
+    bst_inorder(tree->left);//vypsani leveho synu pomoci rekurze
+    bst_print_node(tree);//pote koren
+    bst_inorder(tree->right);//a pak prave syny
   }
 }
 /*
@@ -251,8 +251,8 @@ void bst_postorder(bst_node_t *tree)
 {
   if(tree != NULL)
   {
-    bst_postorder(tree->left);
-    bst_postorder(tree->right);
-    bst_print_node(tree);
+    bst_postorder(tree->left);//levy syn
+    bst_postorder(tree->right);//pravy syn
+    bst_print_node(tree);//koren
   }
 }
