@@ -658,13 +658,11 @@ Binary tree structure:
      |     |
      |     +-[I,9]
      |
-  +-[F,6]
+  +-[G,7]
      |
-     |     +-[E,5]
-     |     |
-     |  +-[p,21862]
+     |  +-[F,6]
      |  |  |
-     |  |  +-[,0]
+     |  |  +-[E,5]
      |  |
      +-[D,4]
         |
@@ -673,5 +671,116 @@ Binary tree structure:
         +-[B,2]
            |
            +-[A,1]
+
+
+[test_tree_dispose_filled] Dispose the whole tree
+Binary tree structure:
+
+           +-[O,16]
+           |
+        +-[N,14]
+        |  |
+        |  +-[M,13]
+        |
+     +-[L,12]
+     |  |
+     |  |  +-[K,11]
+     |  |  |
+     |  +-[J,10]
+     |     |
+     |     +-[I,9]
+     |
+  +-[H,8]
+     |
+     |     +-[G,7]
+     |     |
+     |  +-[F,6]
+     |  |  |
+     |  |  +-[E,5]
+     |  |
+     +-[D,4]
+        |
+        |  +-[C,3]
+        |  |
+        +-[B,2]
+           |
+           +-[A,1]
+
+Binary tree structure:
+
+           +-[O,16]
+           |
+        +-[N,14]
+        |  |
+        |  +-[M,13]
+        |
+     +-[L,12]
+     |  |
+     |  |  +-[K,11]
+     |  |  |
+     |  +-[J,10]
+     |     |
+     |     +-[I,9]
+     |
+  +-[H,8]
+     |
+     |     +-[G,7]
+     |     |
+     |  +-[F,6]
+     |  |  |
+     |  |  +-[E,5]
+     |  |
+     +-[D,4]
+        |
+        |  +-[C,3]
+        |  |
+        +-[B,2]
+           |
+           +-[A,1]
+
+
+[test_tree_preorder] Traverse the tree using preorder
+
+Binary tree structure:
+
+     +-[E,5]
+     |
+  +-[D,1]
+     |
+     |  +-[C,4]
+     |  |
+     +-[B,2]
+        |
+        +-[A,3]
+
+
+[test_tree_inorder] Traverse the tree using inorder
+
+Binary tree structure:
+
+     +-[E,5]
+     |
+  +-[D,1]
+     |
+     |  +-[C,4]
+     |  |
+     +-[B,2]
+        |
+        +-[A,3]
+
+
+[test_tree_postorder] Traverse the tree using postorder
+
+Binary tree structure:
+
+     +-[E,5]
+     |
+  +-[D,1]
+     |
+     |  +-[C,4]
+     |  |
+     +-[B,2]
+        |
+        +-[A,3]
 
 
