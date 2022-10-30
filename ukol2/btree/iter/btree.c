@@ -188,9 +188,9 @@ void bst_delete(bst_node_t **tree, char key)
 
   bst_node_t *temp = (*tree), *pre = NULL;
 
-  while (temp != NULL && temp->key != key) 
+  while (temp != NULL && temp->key != key) // iterovat do doby nez se nalezne hledany prvek
   {
-    pre = temp;
+    pre = temp;//ulozeni otce
 
     if(key < temp->key)
       temp = temp->left;
@@ -202,16 +202,16 @@ void bst_delete(bst_node_t **tree, char key)
   if(!temp)
     return;
 
-  if(temp->left == NULL || temp->right == NULL) 
+  if(temp->left == NULL || temp->right == NULL) //uzel ma nanejvys 1 potomka
   {
     bst_node_t *sub = NULL;
 
-    if(temp->left == NULL)
+    if(temp->left == NULL)//nalezeni syna a ulozeni
       sub = temp->right;
     else
       sub = temp->left;
 
-    if(temp == pre->left)
+    if(temp == pre->left)//uprava navaznosti z rodice na dalsiho potomka
       pre->left = sub;
 
     else
@@ -219,7 +219,7 @@ void bst_delete(bst_node_t **tree, char key)
 
     free(temp);
   }
-  else bst_replace_by_rightmost(temp,&temp->left);
+  else bst_replace_by_rightmost(temp,&temp->left);//v pripade ze uzel ma 2 potomky
 }
 
 /*
@@ -236,25 +236,26 @@ void bst_dispose(bst_node_t **tree)
 {
   stack_bst_t stack;
   stack_bst_init(&stack);
+  bst_node_t *temp = NULL;
 
-  do
+  if(!(*tree))
+    return;
+
+  stack_bst_push(&stack,(*tree));//ulozeni koren. uzlu na stack
+
+  while (!stack_bst_empty(&stack))//iterovat dokud jsou prvky k smazani
   {
-    if((*tree) == NULL && !stack_bst_empty(&stack))
-    {
-      (*tree) = stack_bst_top(&stack);
-      stack_bst_pop(&stack);
-    }
-    else if ((*tree)->right != NULL)
-    {
-      stack_bst_push(&stack,(*tree)->right);
-    }
+    temp = stack_bst_pop(&stack);//pop ze stacku k uvolneni korenoveho uzlu
 
-    bst_node_t *temp = (*tree);
-    (*tree) = (*tree)->right;
-    free(temp);
+    if(temp->right)//pri existenci synu ulozit syny na stack a pri dalsi iteraci popnout a smazat
+      stack_bst_push(&stack,temp->right);
 
-  }while ((*tree)!= NULL || !stack_bst_empty(&stack));
-  
+    if(temp->left)
+      stack_bst_push(&stack,temp->left);
+    free(temp);//smazani ponuteho uzlu
+  }
+
+  (*tree) = NULL;
 }
 
 /*
