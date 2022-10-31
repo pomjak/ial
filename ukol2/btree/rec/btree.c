@@ -109,22 +109,7 @@ void bst_replace_by_rightmost(bst_node_t *target, bst_node_t **tree)
   
   bst_node_t *temp;
   
-  if((*tree)->right == NULL)//uzel nalezen jako list
-  {
-    temp = (*tree);
-
-    target->value = temp->value;//predani dat
-    target->key = temp->key;
-
-    target->left = NULL;//zruseni navaznosti
-
-    if(temp->left != NULL)//preklenuti navaznosti
-      target->left = temp->left;
-
-    free(temp);
-  }
-
-  else if((*tree)->right->right == NULL)//nalezeni nejpravejsiho uzlu v roli otce leveho podstromu
+  if((*tree)->right->right == NULL)//nalezeni otce mostright uzlu
   {
     temp = (*tree)->right;
 
@@ -139,7 +124,7 @@ void bst_replace_by_rightmost(bst_node_t *target, bst_node_t **tree)
     free(temp);
   }
 
-  else bst_replace_by_rightmost(target, &(*tree)->right);//jinak rekurze pro vzhledani 
+  else bst_replace_by_rightmost(target, &(*tree)->right);//jinak rekurze pro vyhledani 
 
 }
 
