@@ -136,7 +136,7 @@ void bst_replace_by_rightmost(bst_node_t *target, bst_node_t **tree)
 
   for(bst_node_t *temp = (*tree),*pre = NULL; temp; temp = temp->right)
   {
-    if(temp->right == NULL)//nalezeni nejpravejsiho uzlu
+    if(temp->right == NULL)//pripad kdy uzel je hned jako root podstromu a ma syny
     {
       target->value = temp->value;
       target->key = temp->key;
