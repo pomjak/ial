@@ -5,7 +5,7 @@ FILES=btree.c ../btree.c ../test_util.c ../test.c
 .PHONY: test clean
 
 test: $(FILES)
-	$(CC) $(CFLAGS) -o $@ $(FILES)
+	$(CC) $(CFLAGS) -g -o $@ $(FILES)
 
 run: test
 	@./test > current-test.output
